@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>mancheeh.shop · premium affiliate store</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&family=Playfair+Display:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    // Apply saved theme before paint, so there's no light-mode flash
+    (function () {
+      const saved = localStorage.getItem('mancheeh-theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) document.documentElement.setAttribute('data-theme', 'dark');
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar">
+    <div class="container nav-wrapper">
+      <div class="logo">mancheeh<span>.shop</span></div>
+      <div class="search-wrapper">
+        <div class="nav-search">
+          <input type="text" id="searchInput" placeholder="Search products..." autocomplete="off" />
+          <button id="searchBtn" aria-label="Search"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="suggestions-box" id="suggestionsBox"></div>
+      </div>
+      <div class="nav-icons">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><i class="fas fa-moon"></i></button>
+        <i class="fas fa-heart" aria-label="Wishlist"></i>
+        <i class="fas fa-user" aria-label="Account"></i>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1>Shop Smarter Across Amazon &amp; Jumia</h1>
+          <p>Top-picked products from the world's biggest stores — curated just for you.</p>
+          <a href="#products" class="btn-primary">
+            Shop Now <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+        <div class="hero-img">
+          <img src="image/logo.png" alt="shopping lifestyle" />
+        </div>
+      </div>
+    </section>
+
+    <div class="container">
+
+      <!-- ===== ABOUT ===== -->
+      <section class="about-section">
+        <h2 class="section-title">About mancheeh.shop</h2>
+        <p>
+          We curate the best products from <strong>Amazon</strong> and <strong>Jumia</strong>.
+          Clicking <strong>Buy Now</strong> takes you directly to the official store for a safe, secure purchase.
+        </p>
+      </section>
+
+      <!-- ===== STORE + CATEGORY FILTERS ===== -->
+      <div id="products">
+
+        <!-- Store tabs -->
+        <div class="store-tabs">
+          <button class="store-btn active" data-store="all">
+            <i class="fas fa-store"></i> All Stores
+          </button>
+          <button class="store-btn amazon" data-store="amazon">
+            <i class="fab fa-amazon"></i> Amazon
+          </button>
+          <button class="store-btn jumia" data-store="jumia">
+            <i class="fas fa-shopping-bag"></i> Jumia
+          </button>
+        </div>
+
+        <!-- Category tabs -->
+        <div class="filter-tabs">
+          <button class="filter-btn active" data-filter="all">
+            <i class="fas fa-th"></i> All Products
+          </button>
+          <button class="filter-btn" data-filter="phone">
+            <i class="fas fa-mobile-alt"></i> Phone Accessories
+          </button>
+          <button class="filter-btn" data-filter="beauty">
+            <i class="fas fa-spa"></i> Beauty &amp; Hair
+          </button>
+          <button class="filter-btn" data-filter="trending">
+            <i class="fas fa-fire"></i> Trending
+          </button>
+          <button class="filter-btn" data-filter="medicine">
+            <i class="fas fa-pills"></i> Medicines
+          </button>
+        </div>
+
+        <!-- Results info -->
+        <div class="results-bar" id="resultsBar"></div>
+
+        <!-- Product grid -->
+        <div class="product-grid" id="productGrid"></div>
+      </div>
+
+      <!-- ===== TESTIMONIALS ===== -->
+      <section class="testimonials">
+        <h2 class="section-title">What our customers say</h2>
+        <div class="testimonial-grid">
+          <div class="testimonial-card">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+            <p>"Amazing finds across both Amazon and Jumia in one place!"</p>
+            <span class="t-author">— Amina K.</span>
+          </div>
+          <div class="testimonial-card">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+            <p>"Love the curated selection. The medicine section is so useful."</p>
+            <span class="t-author">— Chukwudi O.</span>
+          </div>
+          <div class="testimonial-card">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+            <p>"mancheeh.shop is my go-to for gadgets and beauty products."</p>
+            <span class="t-author">— Fatima B.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== NEWSLETTER ===== -->
+      <section class="newsletter">
+        <div class="newsletter-box">
+          <div class="newsletter-text">
+            <h3>Stay in the loop</h3>
+            <p>Get new deals from Amazon &amp; Jumia straight to your inbox</p>
+          </div>
+          <div class="newsletter-form">
+            <input type="email" placeholder="Your email address" />
+            <button type="button">Subscribe</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== CONTACT ===== -->
+      <section class="contact-section">
+        <h2 class="section-title">Get in touch</h2>
+        <div class="contact-grid">
+          <div class="contact-info">
+            <p><i class="fas fa-envelope"></i>
+              <a href="mailto:shettimafaruk@gmail.com">shettimafaruk@gmail.com</a>
+            </p>
+            <p><i class="fab fa-whatsapp"></i>
+              <a href="https://wa.me/2347057779909" target="_blank" rel="noopener">+234 705 777 9909</a>
+            </p>
+            <div class="social-icons">
+              <a href="https://instagram.com/itz_mancheeh" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+              <a href="https://facebook.com/itz_mancheeh" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+              <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            </div>
+          </div>
+          <form class="contact-form" onsubmit="return false;">
+            <input type="text" placeholder="Your name" required />
+            <input type="email" placeholder="Your email" required />
+            <textarea placeholder="Your message" rows="4"></textarea>
+            <button type="submit" class="btn-primary" style="align-self:flex-start;">Send Message</button>
+          </form>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <div class="logo" style="font-size:1.4rem;">mancheeh<span style="color:#c9a87c;">.shop</span></div>
+        <p style="margin-top:8px;font-size:0.85rem;color:#5f5f73;">© 2026 All rights reserved.</p>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <a href="#">About</a><a href="#">Contact</a><a href="#">Privacy</a>
+      </div>
+      <div>
+        <h4>Stores</h4>
+        <a href="#" onclick="filterByStore('amazon')"><i class="fab fa-amazon"></i> Amazon</a>
+        <a href="#" onclick="filterByStore('jumia')"><i class="fas fa-shopping-bag"></i> Jumia</a>
+      </div>
+      <div>
+        <h4>Categories</h4>
+        <a href="#">Phone Accessories</a>
+        <a href="#">Beauty &amp; Hair</a>
+        <a href="#">Trending</a>
+        <a href="#">Medicines</a>
+      </div>
+      <div>
+        <h4>Follow Us</h4>
+        <a href="https://instagram.com/itz_mancheeh" target="_blank" rel="noopener"><i class="fab fa-instagram"></i> itz_mancheeh</a>
+        <a href="https://facebook.com/itz_mancheeh" target="_blank" rel="noopener"><i class="fab fa-facebook"></i> itz_mancheeh</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- back to top -->
+  <button class="back-top" id="backTop" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
+
+  <!-- ===== MODAL ===== -->
+  <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <button class="modal-close" id="modalClose" aria-label="Close"><i class="fas fa-times"></i></button>
+      <div class="modal-store-badge" id="modalStoreBadge"></div>
+      <div class="modal-img"><img id="modalImg" src="" alt="Product" /></div>
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <p class="modal-desc" id="modalDesc"></p>
+      <ul class="modal-features" id="modalFeatures"></ul>
+      <div class="modal-footer">
+        <span class="modal-price" id="modalPrice"></span>
+        <a href="#" class="modal-buy-btn" id="modalBuyBtn" target="_blank" rel="noopener noreferrer">
+          Buy Now <i class="fas fa-external-link-alt" style="font-size:0.8rem;margin-left:6px;"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Supabase (products now live in a database; products.js is only used as
+       an instant-load placeholder / offline fallback if Supabase isn't configured) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="products-service.js"></script>
+  <script src="products.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

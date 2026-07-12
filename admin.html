@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Admin · mancheeh.shop</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="admin.css" />
+  <script>
+    // Apply saved theme before paint, so there's no light-mode flash
+    (function () {
+      const saved = localStorage.getItem('mancheeh-theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) document.documentElement.setAttribute('data-theme', 'dark');
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- ===== LOGIN SCREEN ===== -->
+  <div class="login-screen" id="loginScreen">
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><i class="fas fa-moon"></i></button>
+    <form class="login-box" id="loginForm">
+      <div class="logo">mancheeh<span>.shop</span></div>
+      <p class="login-sub">Admin dashboard</p>
+      <input type="email" id="loginEmail" placeholder="Admin email" autocomplete="username" required />
+      <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password" required />
+      <button type="submit" class="btn-primary" id="loginBtn">Sign in</button>
+      <p class="login-error" id="loginError"></p>
+      <p class="login-hint" id="configHint" style="display:none;">
+        supabase-config.js isn't set up yet — see SETUP-GUIDE.md.
+      </p>
+    </form>
+  </div>
+
+  <!-- ===== DASHBOARD ===== -->
+  <div class="dashboard" id="dashboard" style="display:none;">
+    <header class="admin-header">
+      <div class="logo">mancheeh<span>.shop</span> <span class="admin-tag">admin</span></div>
+      <div class="admin-header-right">
+        <span class="admin-email" id="adminEmail"></span>
+        <button class="theme-toggle" id="themeToggle2" aria-label="Toggle dark mode"><i class="fas fa-moon"></i></button>
+        <button class="btn-ghost" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Sign out</button>
+      </div>
+    </header>
+
+    <main class="admin-main">
+      <div class="admin-toolbar">
+        <h1>Products <span class="count-pill" id="countPill">0</span></h1>
+        <div class="toolbar-actions">
+          <input type="text" id="adminSearch" placeholder="Filter products…" />
+          <button class="btn-primary" id="addProductBtn"><i class="fas fa-plus"></i> Add product</button>
+        </div>
+      </div>
+
+      <div class="admin-status" id="adminStatus"></div>
+
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Name</th>
+              <th>Store</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="productsBody"></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <!-- ===== ADD/EDIT MODAL ===== -->
+  <div class="modal-overlay" id="formOverlay">
+    <form class="modal-box form-box" id="productForm">
+      <button type="button" class="modal-close" id="formClose"><i class="fas fa-times"></i></button>
+      <h2 id="formTitle">Add product</h2>
+
+      <input type="hidden" id="f_docId" />
+
+      <label>Product name
+        <input type="text" id="f_name" required />
+      </label>
+
+      <label>Description
+        <textarea id="f_desc" rows="2"></textarea>
+      </label>
+
+      <div class="form-row">
+        <label>Price (as shown, e.g. $19.99 or ₦12,500)
+          <input type="text" id="f_price" />
+        </label>
+        <label>Store
+          <select id="f_store" required>
+            <option value="amazon">Amazon</option>
+            <option value="jumia">Jumia</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="form-row">
+        <label>Category
+          <select id="f_category" required>
+            <option value="phone">Phone Accessories</option>
+            <option value="beauty">Beauty & Hair</option>
+            <option value="trending">Trending</option>
+            <option value="medicine">Medicines</option>
+          </select>
+        </label>
+        <label>Product photo
+          <input type="file" id="f_imgFile" accept="image/*" />
+        </label>
+      </div>
+
+      <div class="img-preview-row" id="imgPreviewRow" style="display:none;">
+        <img id="imgPreview" class="img-preview" alt="Preview" />
+        <span id="imgUploadStatus" class="img-upload-status"></span>
+      </div>
+
+      <label>Image URL <span class="label-hint">(fills in automatically after upload — or paste a link instead)</span>
+        <input type="text" id="f_img" placeholder="https://… " />
+      </label>
+
+      <label>Affiliate / buy link
+        <input type="text" id="f_affiliateUrl" placeholder="https://amazon.com/…?tag=yourtag" />
+      </label>
+
+      <label>Features (one per line, shown as bullet points)
+        <textarea id="f_features" rows="3" placeholder="Bluetooth 5.2&#10;30h battery&#10;Waterproof IPX5"></textarea>
+      </label>
+
+      <div class="form-footer">
+        <button type="button" class="btn-ghost" id="formCancel">Cancel</button>
+        <button type="submit" class="btn-primary" id="formSubmit">Save product</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="products-service.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
