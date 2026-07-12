@@ -15,8 +15,8 @@ const SUPABASE_ANON_KEY = "sb_publishable_gCbC9YlzVzLbOjObbQEfkg_NQI_htDW";
 // instead of breaking, if you haven't set this up yet.
 const SUPABASE_CONFIGURED = SUPABASE_URL.indexOf("YOUR_PROJECT_ID") === -1;
 
-let supabase = null;
+let supabaseClient = null;
 
 if (SUPABASE_CONFIGURED) {
-  supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 }
