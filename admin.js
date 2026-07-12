@@ -70,6 +70,10 @@
   loginForm.addEventListener('submit', async e => {
     e.preventDefault();
     loginError.textContent = '';
+    if (!supabaseClient) {
+      loginError.textContent = 'Supabase is not configured. Check supabase-config.js and reload.';
+      return;
+    }
     loginBtn.disabled = true;
     loginBtn.textContent = 'Signing in…';
     const { error } = await supabaseClient.auth.signInWithPassword({
@@ -88,7 +92,9 @@
     return 'Sign-in failed: ' + msg;
   }
 
-  logoutBtn.addEventListener('click', () => supabaseClient.auth.signOut());
+  logoutBtn.addEventListener('click', () => {
+    if (supabaseClient) supabaseClient.auth.signOut();
+  });
 
   if (typeof supabaseClient !== 'undefined' && supabaseClient) {
     supabaseClient.auth.onAuthStateChange((event, session) => {
