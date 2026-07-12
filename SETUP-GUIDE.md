@@ -76,8 +76,9 @@ with photo storage built in. You get:
    `products.js`, `supabase-config.js`, `products-service.js`,
    `admin.html`, `admin.css`, `admin.js`, `migrate.html`, `robots.txt`.
 2. Visit `yourdomain.com/migrate.html`.
-3. Click **"Migrate products.js → Supabase"**. This copies your current
-   33 products into the database, once.
+3. Sign in with the admin email and password you created in step 3, then click
+   **"Migrate products.js → Supabase"**. This copies your current 33 products
+   into the database, once.
 4. Once it says "Done!", **delete migrate.html** from your GitHub repo
    (its job is finished, and you don't want it uploading duplicates by
    accident).
