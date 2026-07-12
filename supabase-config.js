@@ -117,4 +117,9 @@ const ProductService = {
     if (error) throw error;
     return rows.length;
   }
+   let supabaseClient = null;
+
+if (SUPABASE_CONFIGURED) {
+  supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+}
 };
