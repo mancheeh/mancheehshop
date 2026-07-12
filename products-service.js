@@ -60,32 +60,32 @@ const ProductService = {
       .catch(err => { if (onError) onError(err); });
     load();
 
-    const channel = supabase
+    const channel = supabaseClient
       .channel('products-changes')
       .on('postgres_changes', { event: '*', schema: 'public', table: this.table }, load)
       .subscribe();
 
-    return () => { cancelled = true; supabase.removeChannel(channel); };
+    return () => { cancelled = true; supabaseClient.removeChannel(channel); };
   },
 
   async getAll() {
-    const { data, error } = await supabase.from(this.table).select('*').order('id', { ascending: true });
+    const { data, error } = await supabaseClient.from(this.table).select('*').order('id', { ascending: true });
     if (error) throw error;
     return (data || []).map(row => this._fromRow(row));
   },
 
   async add(product) {
-    const { error } = await supabase.from(this.table).insert(this._toRow(product));
+    const { error } = await supabaseClient.from(this.table).insert(this._toRow(product));
     if (error) throw error;
   },
 
   async update(docId, product) {
-    const { error } = await supabase.from(this.table).update(this._toRow(product)).eq('id', docId);
+    const { error } = await supabaseClient.from(this.table).update(this._toRow(product)).eq('id', docId);
     if (error) throw error;
   },
 
   async remove(docId) {
-    const { error } = await supabase.from(this.table).delete().eq('id', docId);
+    const { error } = await supabaseClient.from(this.table).delete().eq('id', docId);
     if (error) throw error;
   },
 
@@ -95,12 +95,12 @@ const ProductService = {
   async uploadImage(file) {
     const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
     const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-    const { error } = await supabase.storage.from(this.bucket).upload(path, file, {
+    const { error } = await supabaseClient.storage.from(this.bucket).upload(path, file, {
       cacheControl: '3600',
       upsert: false,
     });
     if (error) throw error;
-    const { data } = supabase.storage.from(this.bucket).getPublicUrl(path);
+    const { data } = supabaseClient.storage.from(this.bucket).getPublicUrl(path);
     return data.publicUrl;
   },
 
@@ -113,7 +113,7 @@ const ProductService = {
       name: p.name, desc: p.desc, price: p.price, category: p.category,
       store: p.store, img: p.img, affiliateUrl: p.affiliateUrl, features: p.features,
     }));
-    const { error } = await supabase.from(this.table).insert(rows);
+    const { error } = await supabaseClient.from(this.table).insert(rows);
     if (error) throw error;
     return rows.length;
   }
