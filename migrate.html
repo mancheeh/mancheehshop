@@ -34,6 +34,9 @@
     if (typeof SUPABASE_CONFIGURED !== 'undefined' && !SUPABASE_CONFIGURED) {
       log.textContent = 'supabase-config.js is not filled in yet. Add your project URL and key first, then reload this page.';
       btn.disabled = true;
+    } else if (!supabaseClient) {
+      log.textContent = 'Error: supabaseClient is not initialized. Check your Supabase credentials and make sure the Supabase library loaded correctly.';
+      btn.disabled = true;
     }
 
     btn.addEventListener('click', async () => {
