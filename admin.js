@@ -72,7 +72,7 @@
     loginError.textContent = '';
     loginBtn.disabled = true;
     loginBtn.textContent = 'Signing in…';
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabaseClient.auth.signInWithPassword({
       email: loginEmail.value.trim(),
       password: loginPassword.value,
     });
@@ -88,10 +88,10 @@
     return 'Sign-in failed: ' + msg;
   }
 
-  logoutBtn.addEventListener('click', () => supabase.auth.signOut());
+  logoutBtn.addEventListener('click', () => supabaseClient.auth.signOut());
 
-  if (typeof supabase !== 'undefined' && supabase) {
-    supabase.auth.onAuthStateChange((event, session) => {
+  if (typeof supabaseClient !== 'undefined' && supabaseClient) {
+    supabaseClient.auth.onAuthStateChange((event, session) => {
       const user = session && session.user;
       if (user) {
         loginScreen.style.display = 'none';
