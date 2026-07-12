@@ -20,7 +20,14 @@
     after you've set up <code>supabase-config.js</code>. Running it twice will
     duplicate everything — check your Supabase table editor first if you're unsure.
   </div>
-  <button id="runBtn">Migrate products.js → Supabase</button>
+  <div id="loginPanel" style="margin-bottom:24px;">
+    <p>Sign in with your admin email/password before running the migration.</p>
+    <input id="loginEmail" type="email" placeholder="Admin email" style="width:100%;padding:12px 14px;margin:6px 0;border:1px solid #ccc;border-radius:8px;" />
+    <input id="loginPassword" type="password" placeholder="Password" style="width:100%;padding:12px 14px;margin:6px 0;border:1px solid #ccc;border-radius:8px;" />
+    <button id="loginBtn" style="background:#2d3748;color:#fff;border:none;padding:12px 22px;border-radius:40px;font-size:1rem;cursor:pointer;">Sign in</button>
+    <div id="loginError" class="warn" style="display:none;margin-top:14px;"></div>
+  </div>
+  <button id="runBtn" disabled>Migrate products.js → Supabase</button>
   <div id="log">Waiting…</div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -30,23 +37,91 @@
   <script>
     const btn = document.getElementById('runBtn');
     const log = document.getElementById('log');
+    const loginEmail = document.getElementById('loginEmail');
+    const loginPassword = document.getElementById('loginPassword');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginError = document.getElementById('loginError');
+
+    function setStatus(message) {
+      log.textContent = message;
+    }
+
+    function setLoginError(message) {
+      if (!message) {
+        loginError.style.display = 'none';
+        loginError.textContent = '';
+      } else {
+        loginError.style.display = 'block';
+        loginError.textContent = message;
+      }
+    }
+
+    function setSignedIn(user) {
+      if (user) {
+        setStatus(`Signed in as ${user.email}. Ready to migrate ${PRODUCTS.length} products.`);
+        btn.disabled = false;
+        loginEmail.disabled = true;
+        loginPassword.disabled = true;
+        loginBtn.disabled = true;
+      } else {
+        setStatus('Sign in as admin to run the migration.');
+        btn.disabled = true;
+        loginEmail.disabled = false;
+        loginPassword.disabled = false;
+        loginBtn.disabled = false;
+      }
+    }
 
     if (typeof SUPABASE_CONFIGURED !== 'undefined' && !SUPABASE_CONFIGURED) {
-      log.textContent = 'supabase-config.js is not filled in yet. Add your project URL and key first, then reload this page.';
+      setStatus('supabase-config.js is not filled in yet. Add your project URL and key first, then reload this page.');
       btn.disabled = true;
+      loginBtn.disabled = true;
     } else if (!supabaseClient) {
-      log.textContent = 'Error: supabaseClient is not initialized. Check your Supabase credentials and make sure the Supabase library loaded correctly.';
+      setStatus('Error: supabaseClient is not initialized. Check your Supabase credentials and make sure the Supabase library loaded correctly.');
       btn.disabled = true;
+      loginBtn.disabled = true;
+    } else {
+      setStatus('Sign in as admin to run the migration.');
+      supabaseClient.auth.onAuthStateChange((event, session) => {
+        setLoginError('');
+        setSignedIn(session?.user || null);
+      });
+      supabaseClient.auth.getSession().then(({ data }) => {
+        setSignedIn(data?.session?.user || null);
+      }).catch(() => {
+        setSignedIn(null);
+      });
     }
+
+    loginBtn.addEventListener('click', async () => {
+      if (!supabaseClient) return;
+      setLoginError('');
+      loginBtn.disabled = true;
+      loginBtn.textContent = 'Signing in…';
+      const email = loginEmail.value.trim();
+      const password = loginPassword.value;
+      if (!email || !password) {
+        setLoginError('Enter both email and password.');
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Sign in';
+        return;
+      }
+      const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+      loginBtn.textContent = 'Sign in';
+      loginBtn.disabled = false;
+      if (error) {
+        setLoginError(error.message || 'Sign-in failed.');
+      }
+    });
 
     btn.addEventListener('click', async () => {
       btn.disabled = true;
-      log.textContent = `Uploading ${PRODUCTS.length} products…`;
+      setStatus(`Uploading ${PRODUCTS.length} products…`);
       try {
         const count = await ProductService.bulkImport(PRODUCTS);
-        log.textContent = `Done! ${count} products uploaded to Supabase.\n\nYou can now delete this file (migrate.html) and open admin.html to manage your store.`;
+        setStatus(`Done! ${count} products uploaded to Supabase.\n\nYou can now delete this file (migrate.html) and open admin.html to manage your store.`);
       } catch (err) {
-        log.textContent = 'Error: ' + err.message + '\n\nCheck your Supabase table exists with the right columns and that Row Level Security allows inserts (see SETUP-GUIDE.md).';
+        setStatus('Error: ' + err.message + '\n\nCheck your Supabase table exists with the right columns and that Row Level Security allows inserts (see SETUP-GUIDE.md).');
         btn.disabled = false;
       }
     });
