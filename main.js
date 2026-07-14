@@ -266,8 +266,27 @@
     document.getElementById('products').scrollIntoView({ behavior:'smooth' });
   };
 
+  /* ── shared product links ──
+     Someone can visit yoursite.com/?product=17 (copied from the admin
+     dashboard) and that exact product's popup opens automatically —
+     a clean, branded link to post on social media instead of a raw
+     affiliate URL. */
+  let sharedProductHandled = false;
+  function tryOpenSharedProduct() {
+    if (sharedProductHandled) return;
+    const params = new URLSearchParams(window.location.search);
+    const sharedId = params.get('product');
+    if (!sharedId) { sharedProductHandled = true; return; }
+    const match = products.find(x => String(x.docId || x.id) === String(sharedId));
+    if (match) {
+      openModal(sharedId);
+      sharedProductHandled = true;
+    }
+  }
+
   /* ── init ── */
   renderProducts();
+  tryOpenSharedProduct();
 
   // Connect to the database for live product data, if configured.
   if (typeof SUPABASE_CONFIGURED !== 'undefined' && SUPABASE_CONFIGURED &&
@@ -277,6 +296,7 @@
         if (liveProducts.length) {
           products = liveProducts;
           renderProducts();
+          tryOpenSharedProduct();
         }
       },
       () => { /* on error, silently keep showing the bundled products.js data */ }
