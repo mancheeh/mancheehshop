@@ -102,6 +102,13 @@ Every change appears on your live storefront within a second or two.
 
 ## Notes
 
+- **Shareable product links**: every row in `admin.html` has a link icon —
+  click it to copy a clean link like `yourdomain.vercel.app/?product=17`
+  straight to your clipboard. Post that on Instagram/WhatsApp/etc., and
+  when someone opens it, that exact product's popup opens automatically —
+  no random-looking affiliate URL, and it starts with your own domain name
+  so people trust it. If you later add a custom domain (e.g. `mancheeh.shop`)
+  in Vercel, these links automatically start with that instead.
 - **Offline fallback**: if `supabase-config.js` isn't filled in yet, the
   storefront still works using the old `products.js` data, so your site
   never breaks while you're setting things up.
