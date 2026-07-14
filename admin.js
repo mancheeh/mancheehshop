@@ -156,6 +156,7 @@
         <td>${escHtml(p.price || '—')}</td>
         <td>
           <div class="row-actions">
+            <button class="btn-icon" data-share="${p.docId}" aria-label="Copy shareable link" title="Copy shareable link"><i class="fas fa-link"></i></button>
             <button class="btn-icon" data-edit="${p.docId}" aria-label="Edit"><i class="fas fa-pen"></i></button>
             <button class="btn-danger" data-delete="${p.docId}">Delete</button>
           </div>
@@ -171,11 +172,31 @@
   adminSearch.addEventListener('input', renderTable);
 
   productsBody.addEventListener('click', e => {
-    const editId = e.target.closest('[data-edit]')?.dataset.edit;
-    const delId  = e.target.closest('[data-delete]')?.dataset.delete;
+    const editId  = e.target.closest('[data-edit]')?.dataset.edit;
+    const delId   = e.target.closest('[data-delete]')?.dataset.delete;
+    const shareId = e.target.closest('[data-share]')?.dataset.share;
     if (editId) openForm(allProducts.find(p => p.docId === editId));
     if (delId) confirmDelete(delId);
+    if (shareId) copyShareLink(shareId, e.target.closest('[data-share]'));
   });
+
+  function copyShareLink(docId, btnEl) {
+    const url = `${window.location.origin}/?product=${docId}`;
+    const done = ok => {
+      if (btnEl) {
+        const original = btnEl.innerHTML;
+        btnEl.innerHTML = ok ? '<i class="fas fa-check"></i>' : '<i class="fas fa-times"></i>';
+        setTimeout(() => { btnEl.innerHTML = original; }, 1500);
+      }
+      setStatus(ok ? `Link copied: ${url}` : `Couldn't copy automatically — here's the link: ${url}`, !ok);
+      if (ok) setTimeout(() => setStatus(''), 4000);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(() => done(true)).catch(() => done(false));
+    } else {
+      done(false);
+    }
+  }
 
   async function confirmDelete(docId) {
     const p = allProducts.find(x => x.docId === docId);
