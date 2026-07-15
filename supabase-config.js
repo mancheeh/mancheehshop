@@ -18,13 +18,5 @@ const SUPABASE_CONFIGURED = SUPABASE_URL.indexOf("YOUR_PROJECT_ID") === -1;
 let supabaseClient = null;
 
 if (SUPABASE_CONFIGURED) {
-  if (typeof window.supabase !== 'undefined') {
-    try {
-      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    } catch (err) {
-      console.error('Failed to initialize Supabase client:', err);
-    }
-  } else {
-    console.error('Supabase library not loaded. Make sure the CDN script loaded successfully.');
-  }
+  supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 }
