@@ -12,10 +12,15 @@ create table if not exists public.products (
   category     text,
   store        text,
   img          text,
+  images       jsonb default '[]'::jsonb,
   affiliate_url text,
   features     jsonb default '[]'::jsonb,
   created_at   timestamptz default now()
 );
+
+-- If your table already exists (you already ran this file before), this
+-- line safely adds the new "images" column without touching your data:
+alter table public.products add column if not exists images jsonb default '[]'::jsonb;
 
 -- 2. Turn on Row Level Security (RLS) — required so your data isn't wide open
 alter table public.products enable row level security;
