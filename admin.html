@@ -112,18 +112,18 @@
             <option value="medicine">Medicines</option>
           </select>
         </label>
-        <label>Product photo
-          <input type="file" id="f_imgFile" accept="image/*" />
+        <label>Product photos
+          <input type="file" id="f_imgFile" accept="image/*" multiple />
         </label>
       </div>
 
       <div class="img-preview-row" id="imgPreviewRow" style="display:none;">
-        <img id="imgPreview" class="img-preview" alt="Preview" />
+        <div class="img-preview-list" id="imgPreviewList"></div>
         <span id="imgUploadStatus" class="img-upload-status"></span>
       </div>
 
-      <label>Image URL <span class="label-hint">(fills in automatically after upload — or paste a link instead)</span>
-        <input type="text" id="f_img" placeholder="https://… " />
+      <label>Image URLs (one per line)
+        <textarea id="f_images" rows="4" placeholder="https://...\nhttps://...\nhttps://..."></textarea>
       </label>
 
       <label>Affiliate / buy link
