@@ -19,7 +19,6 @@ const ProductService = {
 
   // DB row → app-friendly product object
   _fromRow(row) {
-    const images = Array.isArray(row.images) ? row.images : (row.images ? JSON.parse(row.images) : []);
     return {
       docId: row.id,
       name: row.name || '',
@@ -28,9 +27,9 @@ const ProductService = {
       category: row.category || '',
       store: row.store || '',
       img: row.img || '',
-      images: images.length ? images : (row.img ? [row.img] : []),
       affiliateUrl: row.affiliate_url || '#',
       features: row.features || [],
+      slug: row.slug || '',
     };
   },
 
@@ -42,8 +41,7 @@ const ProductService = {
       price: p.price,
       category: p.category,
       store: p.store,
-      img: p.img || (Array.isArray(p.images) && p.images.length ? p.images[0] : ''),
-      images: Array.isArray(p.images) ? p.images : p.img ? [p.img] : [],
+      img: p.img,
       affiliate_url: p.affiliateUrl,
       features: p.features || [],
     };
@@ -58,11 +56,6 @@ const ProductService = {
    * Returns an unsubscribe function.
    */
   onProductsChange(callback, onError) {
-    if (!supabaseClient) {
-      if (onError) onError(new Error('supabaseClient is not initialized. Check supabase-config.js'));
-      return () => {};
-    }
-
     let cancelled = false;
     const load = () => this.getAll().then(rows => { if (!cancelled) callback(rows); })
       .catch(err => { if (onError) onError(err); });
@@ -77,26 +70,22 @@ const ProductService = {
   },
 
   async getAll() {
-    if (!supabaseClient) throw new Error('supabaseClient is not initialized. Check supabase-config.js');
     const { data, error } = await supabaseClient.from(this.table).select('*').order('id', { ascending: true });
     if (error) throw error;
     return (data || []).map(row => this._fromRow(row));
   },
 
   async add(product) {
-    if (!supabaseClient) throw new Error('supabaseClient is not initialized. Check supabase-config.js');
     const { error } = await supabaseClient.from(this.table).insert(this._toRow(product));
     if (error) throw error;
   },
 
   async update(docId, product) {
-    if (!supabaseClient) throw new Error('supabaseClient is not initialized. Check supabase-config.js');
     const { error } = await supabaseClient.from(this.table).update(this._toRow(product)).eq('id', docId);
     if (error) throw error;
   },
 
   async remove(docId) {
-    if (!supabaseClient) throw new Error('supabaseClient is not initialized. Check supabase-config.js');
     const { error } = await supabaseClient.from(this.table).delete().eq('id', docId);
     if (error) throw error;
   },
@@ -105,7 +94,6 @@ const ProductService = {
    *  Storage and return its public URL, ready to save on the
    *  product's `img` field. */
   async uploadImage(file) {
-    if (!supabaseClient) throw new Error('supabaseClient is not initialized. Check supabase-config.js');
     const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
     const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
     const { error } = await supabaseClient.storage.from(this.bucket).upload(path, file, {
@@ -122,7 +110,6 @@ const ProductService = {
    *  Supabase. Drops the old numeric `id` so Postgres assigns
    *  its own. */
   async bulkImport(productsArray) {
-    if (!supabaseClient) throw new Error('supabaseClient is not initialized. Check supabase-config.js');
     const rows = productsArray.map(p => this._toRow({
       name: p.name, desc: p.desc, price: p.price, category: p.category,
       store: p.store, img: p.img, affiliateUrl: p.affiliateUrl, features: p.features,
