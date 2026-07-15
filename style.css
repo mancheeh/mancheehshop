@@ -31,15 +31,19 @@ h1,h2,h3,h4 { font-family:'Playfair Display',serif; font-weight:500; letter-spac
 .nav-wrapper { display:flex; align-items:center; gap:12px; }
 .logo { font-family:'Playfair Display',serif; font-size:clamp(1.25rem,4vw,1.9rem); font-weight:700; white-space:nowrap; flex-shrink:0; display:inline-flex; align-items:center; }
 .logo span { color:#c9a87c; }
-.logo-image { height:42px; width:auto; display:block; }
 
 /* search */
-.search-wrapper { flex:1 1 0; min-width:0; position:relative; max-width:440px; }
-.nav-search { display:flex; align-items:center; background:#fff; border-radius:60px; padding:4px 6px 4px 16px; border:1px solid #e6e0d8; transition:.2s; }
+.search-wrapper { flex:1 1 auto; min-width:0; position:relative; max-width:400px; }
+.nav-search { display:flex; align-items:center; background:#fff; border-radius:60px; padding:6px 10px; border:1px solid #e6e0d8; transition:.2s; }
 .nav-search:focus-within { border-color:#c9a87c; box-shadow:0 0 0 3px rgba(201,168,124,.18); }
 .nav-search input { border:none; background:transparent; padding:10px 0; width:100%; min-width:0; outline:none; font-size:.9rem; }
 .nav-search button { background:#c9a87c; border:none; border-radius:60px; padding:8px 14px; color:#fff; cursor:pointer; flex-shrink:0; transition:background .2s; }
 .nav-search button:hover { background:#1e1e2a; }
+
+.nav-icons { display:flex; gap:14px; font-size:1.2rem; flex-shrink:0; margin-left:auto; }
+.nav-icons button.theme-toggle { width:38px; height:38px; }
+.nav-icons i { cursor:pointer; transition:color .2s; }
+.nav-icons i:hover { color:#c9a87c; }
 
 /* suggestions */
 .suggestions-box { position:absolute; top:calc(100% + 8px); left:0; right:0; background:#fff; border-radius:20px; box-shadow:0 20px 40px rgba(0,0,0,.1); border:1px solid #f1ede7; max-height:320px; overflow-y:auto; display:none; z-index:1100; }
@@ -57,9 +61,6 @@ h1,h2,h3,h4 { font-family:'Playfair Display',serif; font-weight:500; letter-spac
 .badge-amazon { background:#FF9900; color:#000; }
 .badge-jumia  { background:#F68B1E; color:#fff; }
 
-.nav-icons { display:flex; gap:14px; font-size:1.2rem; flex-shrink:0; }
-.nav-icons i { cursor:pointer; transition:color .2s; }
-.nav-icons i:hover { color:#c9a87c; }
 
 /* ---------- STORE TABS ---------- */
 .store-tabs { display:flex; flex-wrap:wrap; gap:10px; margin:28px 0 14px; }
@@ -82,8 +83,10 @@ h1,h2,h3,h4 { font-family:'Playfair Display',serif; font-weight:500; letter-spac
 .hero-text { flex:1 1 280px; }
 .hero-text h1 { font-size:clamp(1.8rem,5vw,3.2rem); font-weight:700; margin-bottom:16px; }
 .hero-text p  { font-size:clamp(.95rem,2.5vw,1.2rem); color:#2e2e3e; margin-bottom:28px; max-width:480px; }
-.hero-img { flex:1 1 240px; display:flex; justify-content:center; }
+.hero-img { flex:1 1 240px; display:flex; justify-content:center; align-items:center; }
 .hero-img img { width:100%; max-width:320px; border-radius:28px; box-shadow:0 24px 48px rgba(0,0,0,.08); }
+.hero-brand { font-family:'Playfair Display',serif; font-size:clamp(3rem,7vw,5rem); font-weight:700; text-align:center; line-height:1; color:inherit; }
+.hero-brand span { color:#c9a87c; }
 
 /* store pill badges on hero */
 .hero-stores { display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap; }
