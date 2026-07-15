@@ -19,6 +19,7 @@ const ProductService = {
 
   // DB row → app-friendly product object
   _fromRow(row) {
+    const images = Array.isArray(row.images) ? row.images : (row.images ? JSON.parse(row.images) : []);
     return {
       docId: row.id,
       name: row.name || '',
@@ -27,6 +28,7 @@ const ProductService = {
       category: row.category || '',
       store: row.store || '',
       img: row.img || '',
+      images: images.length ? images : (row.img ? [row.img] : []),
       affiliateUrl: row.affiliate_url || '#',
       features: row.features || [],
     };
@@ -40,7 +42,8 @@ const ProductService = {
       price: p.price,
       category: p.category,
       store: p.store,
-      img: p.img,
+      img: p.img || (Array.isArray(p.images) && p.images.length ? p.images[0] : ''),
+      images: Array.isArray(p.images) ? p.images : p.img ? [p.img] : [],
       affiliate_url: p.affiliateUrl,
       features: p.features || [],
     };
