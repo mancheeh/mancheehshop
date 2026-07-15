@@ -29,8 +29,9 @@ h1,h2,h3,h4 { font-family:'Playfair Display',serif; font-weight:500; letter-spac
 /* ---------- NAVBAR ---------- */
 .navbar { position:sticky; top:0; z-index:1000; background:rgba(255,253,250,.93); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); border-bottom:1px solid rgba(201,168,124,.15); padding:12px 0; }
 .nav-wrapper { display:flex; align-items:center; gap:12px; }
-.logo { font-family:'Playfair Display',serif; font-size:clamp(1.25rem,4vw,1.9rem); font-weight:700; white-space:nowrap; flex-shrink:0; }
+.logo { font-family:'Playfair Display',serif; font-size:clamp(1.25rem,4vw,1.9rem); font-weight:700; white-space:nowrap; flex-shrink:0; display:inline-flex; align-items:center; }
 .logo span { color:#c9a87c; }
+.logo-image { height:42px; width:auto; display:block; }
 
 /* search */
 .search-wrapper { flex:1 1 0; min-width:0; position:relative; max-width:440px; }
