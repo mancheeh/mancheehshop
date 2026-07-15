@@ -33,6 +33,8 @@
       </div>
       <div class="nav-icons">
         <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><i class="fas fa-moon"></i></button>
+        <i class="fas fa-heart" aria-label="Wishlist"></i>
+        <i class="fas fa-user" aria-label="Account"></i>
       </div>
     </div>
   </nav>
@@ -50,7 +52,7 @@
           </a>
         </div>
         <div class="hero-img">
-          <img src="logo.png" alt="mancheeh.shop logo" class="hero-brand-image" />
+          <img src="image/logo.png" alt="shopping lifestyle" />
         </div>
       </div>
     </section>
@@ -108,7 +110,27 @@
         <div class="product-grid" id="productGrid"></div>
       </div>
 
- 
+      <!-- ===== TESTIMONIALS ===== -->
+      <section class="testimonials">
+        <h2 class="section-title">What our customers say</h2>
+        <div class="testimonial-grid">
+          <div class="testimonial-card">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+            <p>"Amazing finds across both Amazon and Jumia in one place!"</p>
+            <span class="t-author">— Amina K.</span>
+          </div>
+          <div class="testimonial-card">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+            <p>"Love the curated selection. The medicine section is so useful."</p>
+            <span class="t-author">— Chukwudi O.</span>
+          </div>
+          <div class="testimonial-card">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+            <p>"mancheeh.shop is my go-to for gadgets and beauty products."</p>
+            <span class="t-author">— Fatima B.</span>
+          </div>
+        </div>
+      </section>
 
       <!-- ===== NEWSLETTER ===== -->
       <section class="newsletter">
@@ -130,18 +152,15 @@
         <div class="contact-grid">
           <div class="contact-info">
             <p><i class="fas fa-envelope"></i>
-              <a href="mailto:mancheehshop@gmail.com">mancheehshop@gmail.com</a>
+              <a href="mailto:shettimafaruk@gmail.com">shettimafaruk@gmail.com</a>
             </p>
             <p><i class="fab fa-whatsapp"></i>
               <a href="https://wa.me/2347057779909" target="_blank" rel="noopener">+234 705 777 9909</a>
             </p>
             <div class="social-icons">
-            
-              <a href="https://instagram.com/mancheehshop" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-              <a href="https://facebook.com/mancheehshop" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+              <a href="https://instagram.com/itz_mancheeh" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+              <a href="https://facebook.com/itz_mancheeh" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
               <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-              <a href="https://pinterest.com/mancheehshop" target="_blank" rel="noopener" aria-label="pinterest"><i class="fab fa-pinterest"></i></a>
-               <a href="https://tiktok.com/mancheehshop" target="_blank" rel="noopener" aria-label="tiktok"><i class="fab fa-tiktok"></i></a>
             </div>
           </div>
           <form class="contact-form" onsubmit="return false;">
@@ -160,7 +179,7 @@
   <footer class="footer">
     <div class="container footer-grid">
       <div>
-       
+        <div class="logo" style="font-size:1.4rem;">mancheeh<span style="color:#c9a87c;">.shop</span></div>
         <p style="margin-top:8px;font-size:0.85rem;color:#5f5f73;">© 2026 All rights reserved.</p>
       </div>
       <div>
@@ -181,10 +200,8 @@
       </div>
       <div>
         <h4>Follow Us</h4>
-        <a href="https://instagram.com/mancheehshop" target="_blank" rel="noopener"><i class="fab fa-instagram"></i> mancheehshop</a>
-        <a href="https://facebook.com/mancheehshop" target="_blank" rel="noopener"><i class="fab fa-facebook"></i> mancheehshop</a>
-        <a href="https://pimterest.com/mancheehshop" target="_blank" rel="noopener"><i class="fab fa-pinterest"></i> mancheehshop</a>
-        <a href="https://tiktok.com/mancheehshop" target="_blank" rel="noopener"><i class="fab fa-tiktok"></i> mancheehshop</a>
+        <a href="https://instagram.com/itz_mancheeh" target="_blank" rel="noopener"><i class="fab fa-instagram"></i> itz_mancheeh</a>
+        <a href="https://facebook.com/itz_mancheeh" target="_blank" rel="noopener"><i class="fab fa-facebook"></i> itz_mancheeh</a>
       </div>
     </div>
   </footer>
@@ -197,12 +214,7 @@
     <div class="modal-box">
       <button class="modal-close" id="modalClose" aria-label="Close"><i class="fas fa-times"></i></button>
       <div class="modal-store-badge" id="modalStoreBadge"></div>
-      <div class="modal-img" id="modalImgWrapper">
-        <button class="modal-image-control modal-prev" id="modalPrevBtn" aria-label="Previous image"><i class="fas fa-chevron-left"></i></button>
-        <button class="modal-image-control modal-next" id="modalNextBtn" aria-label="Next image"><i class="fas fa-chevron-right"></i></button>
-        <img id="modalImg" src="" alt="Product" />
-       
-      </div>
+      <div class="modal-img"><img id="modalImg" src="" alt="Product" /></div>
       <h2 class="modal-title" id="modalTitle"></h2>
       <p class="modal-desc" id="modalDesc"></p>
       <ul class="modal-features" id="modalFeatures"></ul>
