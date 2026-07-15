@@ -12,7 +12,6 @@ create table if not exists public.products (
   category     text,
   store        text,
   img          text,
-  images       jsonb default '[]'::jsonb,
   affiliate_url text,
   features     jsonb default '[]'::jsonb,
   created_at   timestamptz default now()
