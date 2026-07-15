@@ -32,8 +32,9 @@
         <div class="suggestions-box" id="suggestionsBox"></div>
       </div>
       <div class="nav-icons">
+        <i class="fas fa-heart" aria-label="Wishlist"></i>
+        <i class="fas fa-user" aria-label="Account"></i>
         <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><i class="fas fa-moon"></i></button>
-        
       </div>
     </div>
   </nav>
@@ -213,7 +214,12 @@
     <div class="modal-box">
       <button class="modal-close" id="modalClose" aria-label="Close"><i class="fas fa-times"></i></button>
       <div class="modal-store-badge" id="modalStoreBadge"></div>
-      <div class="modal-img"><img id="modalImg" src="" alt="Product" /></div>
+      <div class="modal-img">
+        <img id="modalImg" src="" alt="Product" />
+        <button type="button" class="modal-nav-btn modal-nav-prev" id="modalPrevBtn" aria-label="Previous photo"><i class="fas fa-chevron-left"></i></button>
+        <button type="button" class="modal-nav-btn modal-nav-next" id="modalNextBtn" aria-label="Next photo"><i class="fas fa-chevron-right"></i></button>
+      </div>
+      <div class="modal-thumbs" id="modalThumbs"></div>
       <h2 class="modal-title" id="modalTitle"></h2>
       <p class="modal-desc" id="modalDesc"></p>
       <ul class="modal-features" id="modalFeatures"></ul>
