@@ -33,18 +33,10 @@
   const modalFeatures  = document.getElementById('modalFeatures');
   const modalBuyBtn    = document.getElementById('modalBuyBtn');
   const modalStoreBadge= document.getElementById('modalStoreBadge');
-  const modalPrevBtn   = document.getElementById('modalPrevBtn');
-  const modalNextBtn   = document.getElementById('modalNextBtn');
-  const imageIndicators= document.getElementById('imageIndicators');
-  const modalImgWrapper= document.getElementById('modalImgWrapper');
 
   let currentFilter = 'all';
   let currentStore  = 'all';
   let currentSearch = '';
-  let modalImages = [];
-  let modalImageIndex = 0;
-  let modalImageTimer = null;
-  const modalImageInterval = 15000; // 15 seconds
 
   /* ── dark mode ── */
   const themeToggle = document.getElementById('themeToggle');
@@ -169,31 +161,9 @@
     const p = products.find(x => String(x.docId || x.id) === String(id));
     if (!p) return;
 
-    // prepare images array
-    modalImages = Array.isArray(p.images) && p.images.length ? p.images.slice() : (p.img ? [p.img] : []);
-    modalImageIndex = 0;
-    if (!modalImages.length) modalImages = ['https://placehold.co/200x200?text=No+Image'];
-
-    // set first image
-    modalImg.src = modalImages[modalImageIndex];
-    modalImg.alt = p.name;
+    modalImg.src   = p.img;
+    modalImg.alt   = p.name;
     modalImg.onerror = () => { modalImg.src = 'https://placehold.co/200x200?text=No+Image'; };
-
-    // build indicators
-    imageIndicators.innerHTML = modalImages.map((_, i) => `<button data-idx="${i}" class="${i===modalImageIndex? 'active':''}" aria-label="Show image ${i+1}"></button>`).join('');
-
-    // attach controls
-    if (modalPrevBtn && modalNextBtn) {
-      modalPrevBtn.onclick = () => { prevImage(); resetTimer(); };
-      modalNextBtn.onclick = () => { nextImage(); resetTimer(); };
-    }
-    imageIndicators.querySelectorAll('button').forEach(btn => btn.addEventListener('click', e => {
-      const idx = Number(btn.dataset.idx);
-      showImageAt(idx);
-      resetTimer();
-    }));
-
-    startTimer();
 
     // store badge inside modal
     modalStoreBadge.className = 'modal-store-badge ' + (p.store === 'amazon' ? 'ribbon-amazon' : 'ribbon-jumia');
@@ -219,32 +189,7 @@
   function closeModal() {
     modalOverlay.classList.remove('open');
     document.body.style.overflow = '';
-    stopTimer();
-    // remove control handlers
-    if (modalPrevBtn) modalPrevBtn.onclick = null;
-    if (modalNextBtn) modalNextBtn.onclick = null;
-    imageIndicators.innerHTML = '';
   }
-
-  function showImageAt(idx) {
-    if (!modalImages.length) return;
-    modalImageIndex = (idx + modalImages.length) % modalImages.length;
-    modalImg.src = modalImages[modalImageIndex];
-    const btns = imageIndicators.querySelectorAll('button');
-    btns.forEach((b, i) => b.classList.toggle('active', i === modalImageIndex));
-  }
-
-  function nextImage() { showImageAt(modalImageIndex + 1); }
-  function prevImage() { showImageAt(modalImageIndex - 1); }
-
-  function startTimer() {
-    stopTimer();
-    modalImageTimer = setInterval(() => { nextImage(); }, modalImageInterval);
-  }
-
-  function stopTimer() { if (modalImageTimer) { clearInterval(modalImageTimer); modalImageTimer = null; } }
-
-  function resetTimer() { stopTimer(); startTimer(); }
 
   /* ── events ── */
 
