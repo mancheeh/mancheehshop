@@ -102,6 +102,16 @@ Every change appears on your live storefront within a second or two.
 
 ## Notes
 
+- **Multiple photos per product**: `admin.html` now lets you select several
+  photos at once (or add more later) — each shows as a removable thumbnail,
+  with the first one used as the cover photo in your grid. On your live
+  site, if a product has more than one photo, a thumbnail strip appears
+  under the main image so shoppers can click through them.
+  **One-time step for your existing database**: open Supabase → SQL Editor
+  → New query → run this single line, then you're done:
+  ```sql
+  alter table public.products add column if not exists images jsonb default '[]'::jsonb;
+  ```
 - **Shareable product links**: every row in `admin.html` has a link icon —
   click it to copy a clean link like `yourdomain.vercel.app/?product=17`
   straight to your clipboard. Post that on Instagram/WhatsApp/etc., and
