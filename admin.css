@@ -85,9 +85,14 @@ html[data-theme="dark"] .btn-primary { color:#14141c; }
 .form-box input:focus, .form-box select:focus, .form-box textarea:focus { border-color:var(--accent); }
 .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
 .label-hint { font-weight:400; font-size:.75rem; color:var(--text-soft); text-transform:none; letter-spacing:0; }
-.img-preview-row { display:flex; align-items:center; gap:12px; margin:-6px 0 14px; }
-.img-preview { width:64px; height:64px; border-radius:12px; object-fit:cover; background:var(--surface-2); border:1px solid var(--border); }
-.img-upload-status { font-size:.82rem; color:var(--text-soft); }
+.img-gallery-row { display:flex; flex-wrap:wrap; gap:10px; margin:-6px 0 14px; }
+.img-gallery-item { position:relative; width:72px; height:72px; border-radius:12px; overflow:hidden; border:1px solid var(--border); background:var(--surface-2); }
+.img-gallery-item img { width:100%; height:100%; object-fit:cover; display:block; }
+.img-gallery-item .cover-badge { position:absolute; bottom:0; left:0; right:0; background:rgba(30,30,42,.75); color:#fff; font-size:.6rem; font-weight:700; text-align:center; padding:2px 0; letter-spacing:.03em; }
+.img-gallery-item .remove-btn { position:absolute; top:3px; right:3px; width:20px; height:20px; border-radius:50%; background:rgba(0,0,0,.6); color:#fff; border:none; cursor:pointer; font-size:.7rem; display:flex; align-items:center; justify-content:center; line-height:1; }
+.img-gallery-item .remove-btn:hover { background:var(--danger); }
+.img-gallery-item.uploading { opacity:.5; }
+.img-upload-status { font-size:.82rem; color:var(--text-soft); margin:-8px 0 14px; }
 .img-upload-status.success { color:#3a8f5c; }
 .img-upload-status.error { color:var(--danger); }
 .form-footer { display:flex; justify-content:flex-end; gap:10px; margin-top:8px; }
