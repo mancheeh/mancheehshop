@@ -35,14 +35,14 @@
   const f_category= document.getElementById('f_category');
   const f_img     = document.getElementById('f_img');
   const f_imgFile = document.getElementById('f_imgFile');
-  const imgPreviewRow = document.getElementById('imgPreviewRow');
-  const imgPreview = document.getElementById('imgPreview');
+  const imgGalleryRow = document.getElementById('imgGalleryRow');
   const imgUploadStatus = document.getElementById('imgUploadStatus');
   const f_affiliateUrl = document.getElementById('f_affiliateUrl');
   const f_features = document.getElementById('f_features');
 
   let allProducts = [];
   let unsubscribe = null;
+  let formImages = []; // photo URLs for the product currently being added/edited
 
   /* ── config check ── */
   if (typeof SUPABASE_CONFIGURED !== 'undefined' && !SUPABASE_CONFIGURED) {
@@ -208,6 +208,32 @@
     }
   }
 
+  /* ── photo gallery (multi-photo) ── */
+  function renderImgGallery() {
+    if (!formImages.length) {
+      imgGalleryRow.style.display = 'none';
+      imgGalleryRow.innerHTML = '';
+      return;
+    }
+    imgGalleryRow.style.display = 'flex';
+    imgGalleryRow.innerHTML = formImages.map((url, i) => `
+      <div class="img-gallery-item">
+        <img src="${escHtml(url)}" alt="" onerror="this.src='https://placehold.co/72x72?text=?'" />
+        ${i === 0 ? '<span class="cover-badge">Cover</span>' : ''}
+        <button type="button" class="remove-btn" data-remove-img="${i}" aria-label="Remove photo">✕</button>
+      </div>
+    `).join('');
+    f_img.value = formImages[0] || '';
+  }
+
+  imgGalleryRow.addEventListener('click', e => {
+    const btn = e.target.closest('[data-remove-img]');
+    if (!btn) return;
+    const idx = Number(btn.dataset.removeImg);
+    formImages.splice(idx, 1);
+    renderImgGallery();
+  });
+
   /* ── add/edit form ── */
   function openForm(product) {
     productForm.reset();
@@ -221,20 +247,16 @@
       f_price.value = product.price || '';
       f_store.value = product.store || 'amazon';
       f_category.value = product.category || 'phone';
-      f_img.value = product.img || '';
       f_affiliateUrl.value = product.affiliateUrl || '';
       f_features.value = (product.features || []).join('\n');
-      if (product.img) {
-        imgPreviewRow.style.display = 'flex';
-        imgPreview.src = product.img;
-      } else {
-        imgPreviewRow.style.display = 'none';
-      }
+      formImages = (product.images && product.images.length) ? [...product.images]
+        : (product.img ? [product.img] : []);
     } else {
       formTitle.textContent = 'Add product';
       f_docId.value = '';
-      imgPreviewRow.style.display = 'none';
+      formImages = [];
     }
+    renderImgGallery();
     formOverlay.classList.add('open');
   }
 
@@ -246,21 +268,30 @@
   formOverlay.addEventListener('click', e => { if (e.target === e.currentTarget) closeForm(); });
 
   f_imgFile.addEventListener('change', async () => {
-    const file = f_imgFile.files[0];
-    if (!file) return;
+    const files = Array.from(f_imgFile.files || []);
+    if (!files.length) return;
 
-    imgPreviewRow.style.display = 'flex';
-    imgPreview.src = URL.createObjectURL(file);
-    imgUploadStatus.textContent = 'Uploading…';
+    imgUploadStatus.textContent = `Uploading ${files.length} photo${files.length > 1 ? 's' : ''}…`;
     imgUploadStatus.className = 'img-upload-status';
 
-    try {
-      const url = await ProductService.uploadImage(file);
-      f_img.value = url;
-      imgUploadStatus.textContent = 'Uploaded ✓';
+    let uploaded = 0, failed = 0;
+    for (const file of files) {
+      try {
+        const url = await ProductService.uploadImage(file);
+        formImages.push(url);
+        renderImgGallery();
+        uploaded++;
+      } catch (err) {
+        failed++;
+      }
+    }
+    f_imgFile.value = '';
+
+    if (failed === 0) {
+      imgUploadStatus.textContent = `Uploaded ${uploaded} photo${uploaded > 1 ? 's' : ''} ✓`;
       imgUploadStatus.className = 'img-upload-status success';
-    } catch (err) {
-      imgUploadStatus.textContent = 'Upload failed: ' + err.message;
+    } else {
+      imgUploadStatus.textContent = `Uploaded ${uploaded}, ${failed} failed — try those again.`;
       imgUploadStatus.className = 'img-upload-status error';
     }
   });
@@ -277,7 +308,8 @@
       price: f_price.value.trim(),
       store: f_store.value,
       category: f_category.value,
-      img: f_img.value.trim(),
+      img: formImages[0] || '',
+      images: formImages,
       affiliateUrl: f_affiliateUrl.value.trim() || '#',
       features: f_features.value.split('\n').map(s => s.trim()).filter(Boolean),
     };
