@@ -23,7 +23,7 @@
   <div class="login-screen" id="loginScreen">
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><i class="fas fa-moon"></i></button>
     <form class="login-box" id="loginForm">
-      <img src="logo.png" alt="mancheeh.shop logo" class="logo-image" />
+      <div class="logo">mancheeh<span>.shop</span></div>
       <p class="login-sub">Admin dashboard</p>
       <input type="email" id="loginEmail" placeholder="Admin email" autocomplete="username" required />
       <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password" required />
@@ -38,10 +38,7 @@
   <!-- ===== DASHBOARD ===== -->
   <div class="dashboard" id="dashboard" style="display:none;">
     <header class="admin-header">
-      <div class="logo">
-        <img src="logo.png" alt="mancheeh.shop logo" class="logo-image" />
-        <span class="admin-tag">admin</span>
-      </div>
+      <div class="logo">mancheeh<span>.shop</span> <span class="admin-tag">admin</span></div>
       <div class="admin-header-right">
         <span class="admin-email" id="adminEmail"></span>
         <button class="theme-toggle" id="themeToggle2" aria-label="Toggle dark mode"><i class="fas fa-moon"></i></button>
@@ -115,18 +112,18 @@
             <option value="medicine">Medicines</option>
           </select>
         </label>
-        <label>Product photos
-          <input type="file" id="f_imgFile" accept="image/*" multiple />
+        <label>Product photo
+          <input type="file" id="f_imgFile" accept="image/*" />
         </label>
       </div>
 
       <div class="img-preview-row" id="imgPreviewRow" style="display:none;">
-        <div class="img-preview-list" id="imgPreviewList"></div>
+        <img id="imgPreview" class="img-preview" alt="Preview" />
         <span id="imgUploadStatus" class="img-upload-status"></span>
       </div>
 
-      <label>Image URLs (one per line)
-        <textarea id="f_images" rows="4" placeholder="https://...\nhttps://...\nhttps://..."></textarea>
+      <label>Image URL <span class="label-hint">(fills in automatically after upload — or paste a link instead)</span>
+        <input type="text" id="f_img" placeholder="https://… " />
       </label>
 
       <label>Affiliate / buy link
