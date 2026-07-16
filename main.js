@@ -27,7 +27,6 @@
   const modalOverlay   = document.getElementById('modalOverlay');
   const modalClose     = document.getElementById('modalClose');
   const modalImg       = document.getElementById('modalImg');
-  const modalThumbs    = document.getElementById('modalThumbs');
   const modalTitle     = document.getElementById('modalTitle');
   const modalDesc      = document.getElementById('modalDesc');
   const modalPrice     = document.getElementById('modalPrice');
@@ -158,9 +157,9 @@
   }
 
   /* ── modal photo gallery ──
-     Auto-advances through a product's photos, with prev/next buttons and
-     thumbnail clicks for manual control. Change GALLERY_AUTOPLAY_MS below
-     to speed this up or slow it down (currently 1.5 seconds per photo). */
+     Auto-advances through a product's photos, with prev/next side buttons
+     for manual control. Change GALLERY_AUTOPLAY_MS below to speed this up
+     or slow it down (currently 1.5 seconds per photo). */
   const GALLERY_AUTOPLAY_MS = 1500;
   const modalPrevBtn = document.getElementById('modalPrevBtn');
   const modalNextBtn = document.getElementById('modalNextBtn');
@@ -172,7 +171,6 @@
     if (!modalGallery.length) return;
     modalGalleryIndex = (idx + modalGallery.length) % modalGallery.length; // loops both directions
     modalImg.src = modalGallery[modalGalleryIndex];
-    modalThumbs.querySelectorAll('img').forEach((t, i) => t.classList.toggle('active', i === modalGalleryIndex));
   }
 
   function startGalleryAutoplay() {
@@ -195,11 +193,6 @@
 
   modalPrevBtn.addEventListener('click', () => goToGalleryImage(modalGalleryIndex - 1));
   modalNextBtn.addEventListener('click', () => goToGalleryImage(modalGalleryIndex + 1));
-  modalThumbs.addEventListener('click', e => {
-    const thumb = e.target.closest('img[data-idx]');
-    if (!thumb) return;
-    goToGalleryImage(Number(thumb.dataset.idx));
-  });
 
   /* ── modal ── */
   function openModal(id) {
@@ -214,17 +207,10 @@
     modalImg.onerror = () => { modalImg.src = 'https://placehold.co/200x200?text=No+Image'; };
 
     if (modalGallery.length > 1) {
-      modalThumbs.style.display = 'flex';
-      modalThumbs.innerHTML = modalGallery.map((url, i) => `
-        <img src="${escHtml(url)}" alt="" class="${i === 0 ? 'active' : ''}" data-idx="${i}"
-             onerror="this.src='https://placehold.co/60x60?text=?'" />
-      `).join('');
       modalPrevBtn.classList.remove('hidden');
       modalNextBtn.classList.remove('hidden');
       startGalleryAutoplay();
     } else {
-      modalThumbs.style.display = 'none';
-      modalThumbs.innerHTML = '';
       modalPrevBtn.classList.add('hidden');
       modalNextBtn.classList.add('hidden');
       stopGalleryAutoplay();
