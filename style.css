@@ -102,7 +102,7 @@ h1,h2,h3,h4 { font-family:'Playfair Display',serif; font-weight:500; letter-spac
 
 .product-img { background:#f6f2ec; border-radius:18px; margin-bottom:12px; aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; cursor:pointer; overflow:hidden; margin-top:18px; }
 .product-img img { width:100%; height:100%; object-fit:cover; transition:transform .25s; }
-.product-card:hover .product-img img { transform:scale(3.03); }
+.product-card:hover .product-img img { transform:scale(5.03); }
 .product-title { font-weight:700; font-size:.98rem; margin-bottom:3px; }
 .product-desc  { font-size:.82rem; color:#5f5f73; margin-bottom:6px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; flex:1; }
 .product-price { font-weight:700; font-size:1.1rem; margin:8px 0 12px; }
