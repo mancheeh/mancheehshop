@@ -91,8 +91,8 @@ h1,h2,h3,h4 { font-family:'Playfair Display',serif; font-weight:500; letter-spac
 .pill-jumia  { background:#F68B1E; color:#fff; }
 
 /* ---------- PRODUCT GRID ---------- */
-.product-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:22px; margin:10px 0 40px; }
-.product-card { background:#fff; border-radius:22px; padding:15px 13px 17px; transition:.3s cubic-bezier(.15,.75,.4,1); box-shadow:0 4px 18px rgba(0,0,0,.03); border:1px solid #f1ede7; display:flex; flex-direction:column; position:relative; }
+.product-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:24px; margin:10px 0 40px; }
+.product-card { background:#fff; border-radius:22px; padding:15px 13px 17px; transition:.3s cubic-bezier(.15,.75,.4,1); box-shadow:0 4px 18px rgba(0,0,0,.03); border:1px solid #f1ede7; display:flex; flex-direction:column; height:100%; position:relative; }
 .product-card:hover { transform:translateY(-6px); box-shadow:0 18px 36px rgba(0,0,0,.06); border-color:#dccfc0; }
 
 /* store ribbon */
@@ -100,8 +100,8 @@ h1,h2,h3,h4 { font-family:'Playfair Display',serif; font-weight:500; letter-spac
 .ribbon-amazon { background:#FF9900; color:#000; }
 .ribbon-jumia  { background:#F68B1E; color:#fff; }
 
-.product-img { background:#f6f2ec; border-radius:18px; padding:10px; margin-bottom:12px; aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; cursor:pointer; overflow:hidden; margin-top:18px; }
-.product-img img { max-height:130px; width:auto; object-fit:contain; transition:transform .25s; }
+.product-img { background:#f6f2ec; border-radius:18px; margin-bottom:12px; aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; cursor:pointer; overflow:hidden; margin-top:18px; }
+.product-img img { width:100%; height:100%; object-fit:cover; transition:transform .25s; }
 .product-card:hover .product-img img { transform:scale(1.06); }
 .product-title { font-weight:700; font-size:.98rem; margin-bottom:3px; }
 .product-desc  { font-size:.82rem; color:#5f5f73; margin-bottom:6px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; flex:1; }
@@ -165,8 +165,13 @@ h1,h2,h3,h4 { font-family:'Playfair Display',serif; font-weight:500; letter-spac
 .modal-close { position:sticky; top:0; float:right; background:#f0ece6; border:none; border-radius:60px; padding:7px 14px; font-size:1.1rem; cursor:pointer; z-index:10; transition:background .2s; }
 .modal-close:hover { background:#e0d9d0; }
 .modal-store-badge { display:inline-block; margin-bottom:6px; font-size:.8rem; font-weight:700; padding:4px 14px; border-radius:20px; clear:both; }
-.modal-img { background:#f6f2ec; border-radius:24px; padding:18px; text-align:center; }
+.modal-img { background:#f6f2ec; border-radius:24px; padding:18px; text-align:center; position:relative; }
 .modal-img img { max-height:180px; object-fit:contain; margin:0 auto; }
+.modal-nav-btn { position:absolute; top:50%; transform:translateY(-50%); width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,.9); border:none; color:#1e1e2a; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(0,0,0,.15); transition:.15s; z-index:2; }
+.modal-nav-btn:hover { background:#c9a87c; color:#111; }
+.modal-nav-prev { left:8px; }
+.modal-nav-next { right:8px; }
+.modal-nav-btn.hidden { display:none; }
 .modal-title { margin:14px 0 4px; font-size:clamp(1.1rem,3vw,1.5rem); }
 .modal-desc { color:#3f3f4f; font-size:.93rem; }
 .modal-features { list-style:none; margin:14px 0; }
@@ -186,10 +191,25 @@ h1,h2,h3,h4 { font-family:'Playfair Display',serif; font-weight:500; letter-spac
 /* =====================================================
    RESPONSIVE
    ===================================================== */
+
+/* ── Ultra-wide desktop: cap card width so cards stay a premium, consistent
+   size instead of stretching huge — column count still auto-adjusts,
+   never a fixed number ── */
+@media (min-width:1600px) {
+  .product-grid { grid-template-columns:repeat(auto-fit,minmax(240px,280px)); gap:30px; justify-content:center; }
+}
+
 @media (max-width:900px) {
   .hero { padding:40px 20px 32px; }
   .contact-grid { gap:24px; }
 }
+
+/* ── Tablet: fluid grid with a smaller minimum tile so more, slightly
+   narrower cards fit without overcrowding (typically 3–4 columns) ── */
+@media (max-width:1024px) {
+  .product-grid { grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:20px; }
+}
+
 @media (max-width:768px) {
   .hero-content { flex-direction:column-reverse; }
   .hero-img { flex:0 0 auto; margin-bottom:8px; }
@@ -203,7 +223,12 @@ h1,h2,h3,h4 { font-family:'Playfair Display',serif; font-weight:500; letter-spac
   .newsletter-form { flex-direction:column; }
   .newsletter-form input, .newsletter-form button { width:100%; }
   .modal-box { border-radius:24px; padding:20px 16px 28px; }
+  /* smaller tablets: tighten the fluid grid a bit further */
+  .product-grid { grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:16px; }
 }
+
+/* ── Mobile: exactly 2 columns, always — card width, image, padding, and
+   text all scale down to fit cleanly, never dropping to a single column ── */
 @media (max-width:600px) {
   .container { padding:0 14px; }
   .nav-wrapper { flex-wrap:wrap; }
@@ -212,12 +237,15 @@ h1,h2,h3,h4 { font-family:'Playfair Display',serif; font-weight:500; letter-spac
   .store-btn { padding:8px 16px; font-size:.82rem; }
   .filter-tabs { gap:6px; }
   .filter-btn { padding:8px 12px; font-size:.78rem; }
-  .product-grid { grid-template-columns:repeat(2,1fr); gap:12px; }
-  .product-card { padding:12px 10px 14px; }
-  .product-img img { max-height:110px; }
-  .product-title { font-size:.88rem; }
-  .product-price { font-size:1rem; }
-  .buy-btn { font-size:.82rem; padding:10px 6px; }
+
+  .product-grid { grid-template-columns:repeat(2,1fr); gap:10px; }
+  .product-card { padding:10px 8px 12px; border-radius:16px; }
+  .product-img { border-radius:12px; margin-top:0; }
+  .product-title { font-size:.82rem; line-height:1.3; margin-bottom:2px; }
+  .product-desc { font-size:.72rem; -webkit-line-clamp:2; margin-bottom:4px; }
+  .product-price { font-size:.92rem; margin:4px 0 8px; }
+  .buy-btn { font-size:.74rem; padding:9px 4px; border-radius:40px; }
+
   .testimonial-grid { grid-template-columns:1fr; }
   .footer-grid { grid-template-columns:1fr 1fr; gap:18px; }
   .back-top { bottom:14px; right:14px; width:40px; height:40px; }
@@ -225,14 +253,26 @@ h1,h2,h3,h4 { font-family:'Playfair Display',serif; font-weight:500; letter-spac
 @media (max-width:400px) {
   .logo { font-size:1.2rem; }
   .hero { padding:26px 12px 22px; border-radius:0 0 24px 24px; }
-  .product-grid { gap:9px; }
+  .product-grid { gap:8px; }
+  .product-card { padding:8px 6px 10px; }
+  .product-title { font-size:.76rem; }
+  .product-desc { font-size:.68rem; }
+  .product-price { font-size:.86rem; }
+  .buy-btn { font-size:.68rem; padding:8px 3px; }
   .newsletter-box { padding:26px 14px; border-radius:24px; }
   .modal-box { padding:14px 11px 22px; border-radius:20px; }
   .modal-price { font-size:1.1rem; }
   .modal-buy-btn { padding:10px 20px; font-size:.85rem; }
 }
-@media (max-width:320px) {
-  .product-grid { grid-template-columns:1fr; }
+/* ── Smallest phones (iPhone SE etc.): still exactly 2 columns, just
+   tighter — no collapse to a single column ── */
+@media (max-width:340px) {
+  .product-grid { gap:6px; }
+  .product-card { padding:7px 5px 9px; border-radius:13px; }
+  .product-title { font-size:.72rem; }
+  .product-desc { font-size:.65rem; -webkit-line-clamp:1; }
+  .product-price { font-size:.8rem; margin:3px 0 6px; }
+  .buy-btn { font-size:.66rem; padding:7px 2px; }
   .store-btn { padding:7px 12px; font-size:.78rem; }
 }
 
