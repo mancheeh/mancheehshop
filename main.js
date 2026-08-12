@@ -233,8 +233,44 @@
     modalFeatures.innerHTML = (p.features || []).map(f =>
       `<li><i class="fas fa-check-circle"></i> ${escHtml(f)}</li>`).join('');
 
+    injectProductStructuredData(p);
+
     modalOverlay.classList.add('open');
     document.body.style.overflow = 'hidden';
+  }
+
+  /* ── Product structured data ──
+     Adds/updates a Product JSON-LD block whenever a product popup opens,
+     using only real data already on the product (no invented reviews,
+     ratings, or brand info). This mainly helps when someone shares a
+     product link (yoursite.com/?product=17) — if Google crawls that link,
+     it can understand the product shown, not just the generic homepage. */
+  function injectProductStructuredData(p) {
+    let script = document.getElementById('productStructuredData');
+    if (!script) {
+      script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.id = 'productStructuredData';
+      document.head.appendChild(script);
+    }
+    const priceNumber = parseFloat(String(p.price || '').replace(/[^0-9.]/g, ''));
+    const data = {
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      name: p.name,
+      description: p.desc,
+      image: p.img || undefined,
+    };
+    if (!isNaN(priceNumber) && p.affiliateUrl && p.affiliateUrl !== '#') {
+      data.offers = {
+        '@type': 'Offer',
+        price: priceNumber,
+        priceCurrency: /₦/.test(p.price) ? 'NGN' : 'USD',
+        availability: 'https://schema.org/InStock',
+        url: p.affiliateUrl,
+      };
+    }
+    script.textContent = JSON.stringify(data);
   }
 
   function closeModal() {
@@ -340,19 +376,27 @@
   renderProducts();
   tryOpenSharedProduct();
 
-  // Connect to the database for live product data, if configured.
-  if (typeof SUPABASE_CONFIGURED !== 'undefined' && SUPABASE_CONFIGURED &&
-      typeof ProductService !== 'undefined') {
-    ProductService.onProductsChange(
-      liveProducts => {
-        if (liveProducts.length) {
-          products = liveProducts;
-          renderProducts();
-          tryOpenSharedProduct();
-        }
-      },
-      () => { /* on error, silently keep showing the bundled products.js data */ }
-    );
+  // Load current product data from the database, if configured. This is a
+  // plain one-time fetch (not a live/realtime connection) — the storefront
+  // doesn't need to hold an open connection per visitor the way the admin
+  // dashboard does, so this scales to far more concurrent shoppers.
+  // It re-fetches every few minutes so new/edited products still show up
+  // for people already browsing, without needing a page refresh.
+  function loadProducts() {
+    if (typeof SUPABASE_CONFIGURED !== 'undefined' && SUPABASE_CONFIGURED &&
+        typeof ProductService !== 'undefined') {
+      ProductService.getAll()
+        .then(liveProducts => {
+          if (liveProducts.length) {
+            products = liveProducts;
+            renderProducts();
+            tryOpenSharedProduct();
+          }
+        })
+        .catch(() => { /* silently keep showing whatever data we already have */ });
+    }
   }
+  loadProducts();
+  setInterval(loadProducts, 120000); // refresh every 2 minutes
 
 })();
